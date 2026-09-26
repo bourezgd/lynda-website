@@ -19,3 +19,16 @@ const CLIENTS = [
 //   },
 const TESTIMONIALS = [
 ];
+
+// Featured media: interviews, TV/radio shows, podcasts, press articles, Iconic content.
+// type: "video" | "article" | "podcast". For YouTube links the thumbnail is found automatically.
+// Example:
+//   {
+//     type: "video",
+//     url: "https://www.youtube.com/watch?v=XXXXXXXXXXX",
+//     source: "Iconic",
+//     title: { fr: "Titre de l'émission", en: "Show title", ar: "عنوان البرنامج" },
+//     image: "assets/img/media/cover.jpg", // optional for YouTube, recommended otherwise
+//   },
+const MEDIA = [
+];

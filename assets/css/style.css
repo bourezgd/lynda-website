@@ -22,6 +22,7 @@ html[lang="fr"], html[lang="en"] {
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
 html { scroll-behavior: smooth; }
 body {
   font-family: var(--font);
@@ -86,15 +87,15 @@ a { color: inherit; text-decoration: none; }
 .nav a:hover { color: var(--gold); }
 .header__actions { display: flex; align-items: center; gap: 12px; }
 .lang-switch { display: flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
-.lang-switch button {
-  background: none; border: 0; color: var(--muted); cursor: pointer;
+.lang-switch a {
+  display: grid; place-items: center; color: var(--muted);
   min-width: 34px; height: 34px; border-radius: 999px; padding: 0 8px;
   font-family: var(--font-lat); font-weight: 600; font-size: .8rem;
   transition: color .2s, background .2s;
 }
-.lang-switch button[lang="ar"] { font-family: var(--font-ar); font-size: .95rem; }
-.lang-switch button:hover { color: var(--gold); }
-.lang-switch button[aria-pressed="true"] { background: var(--gold); color: #111; }
+.lang-switch a[lang="ar"] { font-family: var(--font-ar); font-size: .95rem; }
+.lang-switch a:hover { color: var(--gold); }
+.lang-switch a[aria-current="page"] { background: var(--gold); color: #111; }
 .burger { display: none; background: none; border: 0; cursor: pointer; width: 42px; height: 42px; flex-direction: column; justify-content: center; gap: 5px; align-items: center; }
 .burger span { width: 22px; height: 2px; background: var(--text); transition: .3s; }
 .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
@@ -253,6 +254,30 @@ html[dir="rtl"] .timeline__tag { font-family: var(--font); }
 .highlight__year { display: block; margin-bottom: 12px; font-family: var(--font-display-lat); font-size: 3.4rem; font-weight: 700; color: var(--gold); line-height: 1; }
 .highlight h3 { font-size: 1.25rem; margin-bottom: 4px; }
 .highlight p { color: var(--muted); }
+
+/* Featured media */
+.media__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+.media-card { display: flex; flex-direction: column; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--bg-2); transition: transform .3s, border-color .3s; }
+.media-card:hover { transform: translateY(-4px); border-color: rgba(201,169,97,.45); }
+.media-card__thumb { position: relative; aspect-ratio: 16 / 9; background: var(--bg-3); }
+.media-card__thumb img { width: 100%; height: 100%; object-fit: cover; }
+.media-card__play { position: absolute; inset: 0; display: grid; place-items: center; }
+.media-card__play::before { content: "▶"; width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: rgba(11,11,13,.75); color: var(--gold); border: 1px solid var(--gold); padding-inline-start: 4px; }
+.media-card__body { padding: 22px 24px 26px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.media-card__source { color: var(--gold); font-size: .8rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.media-card__title { font-size: 1.1rem; line-height: 1.5; flex: 1; }
+.media-card__cta { color: var(--muted); font-size: .9rem; }
+
+/* Newsletter */
+.newsletter { margin-top: 36px; padding: 28px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--bg-2); position: relative; }
+.newsletter h3 { font-size: 1.1rem; margin-bottom: 6px; }
+.newsletter > p { color: var(--muted); font-size: .95rem; margin-bottom: 16px; }
+.newsletter__row { display: flex; flex-wrap: wrap; gap: 10px; }
+.contact__grid > * { min-width: 0; }
+.newsletter__row input[type=email] { flex: 1 1 180px; min-width: 0; padding: 12px 16px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); color: var(--text); font-family: inherit; font-size: .95rem; }
+.newsletter__row input[type=email]:focus { outline: none; border-color: var(--gold); }
+.newsletter__note { color: var(--gold); font-size: .9rem; margin-top: 12px; }
+.newsletter__note a { text-decoration: underline; }
 
 /* Testimonials */
 .testimonials { background: var(--bg-2); }
