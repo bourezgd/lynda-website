@@ -1,8 +1,8 @@
-// ===== Configuration (TODO: replace with real contact details) =====
+// ===== Configuration =====
 const CONFIG = {
-  email: "contact@lyndakhalfa.com",
-  whatsapp: "213000000000",
-  phoneDisplay: "+213 000 00 00 00",
+  email: "Lynda.khalfa@iconictv.tv",
+  whatsapp: "213770954862",
+  phoneDisplay: "+213 770 95 48 62",
 };
 
 // ===== Translations =====
@@ -167,7 +167,7 @@ const EN = {
 // Arabic strings are read from the HTML on load
 const AR = {
   "form.sent": "شكراً! سيتم فتح تطبيق البريد لإرسال طلبك.",
-  "meta.title": "ليندا خلفة | الإعلام والاتصال والعلاقات العامة",
+  "meta.title": "ليندا خالفة | الإعلام والاتصال والعلاقات العامة",
 };
 document.querySelectorAll("[data-i18n]").forEach((el) => {
   AR[el.dataset.i18n] ??= el.innerHTML;
