@@ -85,6 +85,85 @@ const FR = {
   "meta.title": "Lynda Khalfa | Médias, communication & relations publiques",
 };
 
+const EN = {
+  "brand": "Lynda Khalfa",
+  "nav.about": "About",
+  "nav.journey": "Journey",
+  "nav.services": "Services",
+  "nav.ventures": "Ventures",
+  "nav.contact": "Contact",
+  "cta.contact": "Get in touch",
+  "cta.journey": "Discover my journey",
+  "cta.talk": "Let's talk",
+  "hero.eyebrow": "Media · Communication · Public relations",
+  "hero.title": "A voice that creates <em>presence</em>, an image that builds <em>trust</em>",
+  "hero.lead": "A career spanning leading telecom brands and television channels, now dedicated to institutions and public figures who want to be seen, heard and believed.",
+  "hero.badge": "Founder",
+  "brands.label": "Milestones in my career",
+  "about.quote": "We give our space to icons: people with real achievements and something to say, who are not necessarily stars.",
+  "about.eyebrow": "About",
+  "about.title": "Lynda Khalfa, media & communication expert",
+  "about.p1": "I began my career in the marketing and communication departments of Algeria's leading telecom and technology companies, where I led large-scale advertising and audiovisual campaigns, before moving into television to head the Algiers office of Nessma TV, and later serve as executive director of El Djazairia One.",
+  "about.p2": "Today, I lead two media ventures: Iconic, a platform dedicated to art, culture and entertainment, and Manalya, an agency specialising in communication, production and public relations.",
+  "about.l1": "Dual expertise: major brands and television channels",
+  "about.l2": "Fluent in Arabic, French and English",
+  "about.l3": "A wide network across media, arts and institutions",
+  "journey.eyebrow": "Journey",
+  "journey.title": "From major brands to the screen",
+  "journey.i1.tag": "Telecoms & technology",
+  "journey.i1.t": "Marketing & communication",
+  "journey.i1.d": "Management roles in marketing and communication at Djezzy, Ooredoo and Samsung, and marketing director at Nedjma, where she led major advertising and audiovisual campaigns.",
+  "journey.i2.t": "Communication director",
+  "journey.i2.d": "Led corporate communication for a major public utility company.",
+  "journey.i3.t": "Head of the Algiers office",
+  "journey.i3.d": "Ran the channel's Algiers office for more than four years.",
+  "journey.i4.t": "Executive director",
+  "journey.i4.d": "Led a private television channel, its programming and its teams.",
+  "journey.i5.t": "Founder & entrepreneur",
+  "journey.i5.d": "Launched the Iconic platform and the Manalya agency, and represented Algeria at the Global Media Congress in Abu Dhabi in 2022.",
+  "services.eyebrow": "Services",
+  "services.title": "Media expertise at the service of your image",
+  "services.lead": "From strategy to execution, I support institutions and public figures in every aspect of their media presence.",
+  "services.s1.t": "Communication & PR consulting",
+  "services.s1.d": "Building a clear communication strategy and managing relations with the press and media.",
+  "services.s2.t": "Advertising campaigns & marketing",
+  "services.s2.d": "Designing and leading integrated campaigns, drawing on experience with major brands.",
+  "services.s3.t": "Audiovisual production",
+  "services.s3.d": "Producing shows, videos and digital content that tell your story professionally.",
+  "services.s4.t": "Event management",
+  "services.s4.d": "Press conferences, launches, cultural and artistic events, from concept to delivery.",
+  "services.s5.t": "Personal branding & media training",
+  "services.s5.d": "Shaping the image of public figures, artists and leaders, and preparing them for interviews.",
+  "services.s6.t": "Media strategy",
+  "services.s6.d": "Supporting the launch and growth of channels, platforms and media projects.",
+  "ventures.eyebrow": "Ventures",
+  "ventures.title": "Two ventures, one vision",
+  "ventures.iconic.type": "Media platform",
+  "ventures.iconic.d": "A serious, high-quality platform for art, culture and entertainment that showcases artists and people with real achievements, offering content creation, audiovisual production and digital marketing.",
+  "ventures.manalya.type": "Communication agency",
+  "ventures.manalya.d": "An agency specialising in communication, production, public relations and events, based in Hydra, Algiers.",
+  "highlight.t": "Global Media Congress — Abu Dhabi",
+  "highlight.d": "Iconic represented Algeria at the Global Media Congress, international recognition for the work of a small, ambitious team.",
+  "band.title": "Have a project, a brand or an event that deserves to be told?",
+  "contact.eyebrow": "Contact",
+  "contact.title": "Let's talk about your project",
+  "contact.lead": "Fill in the form or reach me directly through my social accounts.",
+  "contact.email": "Email",
+  "contact.phone": "Phone / WhatsApp",
+  "contact.location": "Location",
+  "contact.city": "Algiers, Algeria",
+  "form.name": "Full name",
+  "form.company": "Organisation",
+  "form.email": "Email",
+  "form.phone": "Phone",
+  "form.service": "Service required",
+  "form.message": "Your message",
+  "form.submit": "Send",
+  "form.sent": "Thank you! Your email app will open to send the request.",
+  "footer.rights": "All rights reserved",
+  "meta.title": "Lynda Khalfa | Media, communication & public relations",
+};
+
 // Arabic strings are read from the HTML on load
 const AR = {
   "form.sent": "شكراً! سيتم فتح تطبيق البريد لإرسال طلبك.",
@@ -94,28 +173,27 @@ document.querySelectorAll("[data-i18n]").forEach((el) => {
   AR[el.dataset.i18n] ??= el.innerHTML;
 });
 
-const langToggle = document.getElementById("langToggle");
+const DICTS = { ar: AR, fr: FR, en: EN };
+const langButtons = document.querySelectorAll("[data-lang]");
 
 function setLang(lang) {
-  const dict = lang === "fr" ? FR : AR;
+  const dict = DICTS[lang];
   document.documentElement.lang = lang;
-  document.documentElement.dir = lang === "fr" ? "ltr" : "rtl";
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
   document.querySelectorAll("[data-i18n]").forEach((el) => {
     const value = dict[el.dataset.i18n];
     if (value !== undefined) el.innerHTML = value;
   });
   document.title = dict["meta.title"];
-  langToggle.textContent = lang === "fr" ? "ع" : "FR";
+  langButtons.forEach((btn) => btn.setAttribute("aria-pressed", btn.dataset.lang === lang));
   try { localStorage.setItem("lang", lang); } catch (e) {}
 }
 
-langToggle.addEventListener("click", () => {
-  setLang(document.documentElement.lang === "fr" ? "ar" : "fr");
-});
+langButtons.forEach((btn) => btn.addEventListener("click", () => setLang(btn.dataset.lang)));
 
 let savedLang = null;
 try { savedLang = localStorage.getItem("lang"); } catch (e) {}
-if (savedLang === "fr") setLang("fr");
+if (savedLang in DICTS && savedLang !== "ar") setLang(savedLang);
 
 // ===== Contact links =====
 const waUrl = `https://wa.me/${CONFIG.whatsapp}`;
@@ -176,7 +254,7 @@ document.getElementById("contactForm").addEventListener("submit", (e) => {
   ].join("\n");
   window.location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   const note = document.getElementById("formNote");
-  note.textContent = (document.documentElement.lang === "fr" ? FR : AR)["form.sent"];
+  note.textContent = DICTS[document.documentElement.lang]["form.sent"];
   note.hidden = false;
 });
 

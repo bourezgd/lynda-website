@@ -27,7 +27,11 @@
         <a href="#contact" data-i18n="nav.contact">تواصل</a>
       </nav>
       <div class="header__actions">
-        <button class="lang-toggle" id="langToggle" aria-label="Change language">FR</button>
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button type="button" data-lang="ar" aria-pressed="true" lang="ar">ع</button>
+          <button type="button" data-lang="fr" aria-pressed="false">FR</button>
+          <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
         <a href="#contact" class="btn btn--gold btn--sm" data-i18n="cta.contact">تواصل معي</a>
         <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
       </div>
