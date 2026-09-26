@@ -3,6 +3,11 @@ const CONFIG = {
   email: "Lynda.khalfa@iconictv.tv",
   whatsapp: "213770954862",
   phoneDisplay: "+213 770 95 48 62",
+  // Form submissions are delivered by FormSubmit (formsubmit.co) to this address.
+  // The very first submission sends an activation email that must be confirmed once.
+  formEndpoint: "https://formsubmit.co/ajax/Lynda.khalfa@iconictv.tv",
+  // GoatCounter site code (e.g. "lyndakhalfa" for lyndakhalfa.goatcounter.com). Empty = analytics off.
+  goatcounter: "",
 };
 
 // ===== Translations =====
@@ -80,9 +85,13 @@ const FR = {
   "form.service": "Service souhaité",
   "form.message": "Votre message",
   "form.submit": "Envoyer",
-  "form.sent": "Merci ! Votre application e-mail va s'ouvrir pour envoyer la demande.",
+  "form.sent": "Merci ! Votre message a bien été envoyé. Je vous réponds très vite.",
   "footer.rights": "Tous droits réservés",
   "meta.title": "Lynda Khalfa | Médias, communication & relations publiques",
+  "form.sending": "Envoi en cours…",
+  "form.error": "L'envoi a échoué. Votre application e-mail va s'ouvrir pour envoyer le message.",
+  "footer.legal": "Mentions légales",
+  "footer.privacy": "Confidentialité",
 };
 
 const EN = {
@@ -159,9 +168,13 @@ const EN = {
   "form.service": "Service required",
   "form.message": "Your message",
   "form.submit": "Send",
-  "form.sent": "Thank you! Your email app will open to send the request.",
+  "form.sent": "Thank you! Your message has been sent. I will get back to you shortly.",
   "footer.rights": "All rights reserved",
   "meta.title": "Lynda Khalfa | Media, communication & public relations",
+  "form.sending": "Sending…",
+  "form.error": "Sending failed. Your email app will open so you can send the message.",
+  "footer.legal": "Legal notice",
+  "footer.privacy": "Privacy",
 };
 
 const AR = {
@@ -239,8 +252,12 @@ const AR = {
   "form.message": "رسالتك",
   "form.submit": "إرسال",
   "footer.rights": "جميع الحقوق محفوظة",
-  "form.sent": "شكراً! سيتم فتح تطبيق البريد لإرسال طلبك.",
+  "form.sent": "شكراً! تم إرسال رسالتك بنجاح، وسأردّ عليك قريباً.",
   "meta.title": "ليندا خالفة | الإعلام والاتصال والعلاقات العامة",
+  "form.sending": "جارٍ الإرسال…",
+  "form.error": "تعذّر الإرسال. سيتم فتح تطبيق البريد لإرسال رسالتك.",
+  "footer.legal": "الإشعار القانوني",
+  "footer.privacy": "سياسة الخصوصية",
 };
 
 const DICTS = { ar: AR, fr: FR, en: EN };
@@ -308,24 +325,62 @@ const observer = new IntersectionObserver(
 );
 document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
 
-// ===== Contact form (opens the visitor's email app) =====
-document.getElementById("contactForm").addEventListener("submit", (e) => {
-  e.preventDefault();
-  const data = new FormData(e.target);
-  const subject = `Consultation — ${data.get("name")}`;
+// ===== Contact form =====
+const t = (key) => DICTS[document.documentElement.lang][key];
+const contactForm = document.getElementById("contactForm");
+const formNote = document.getElementById("formNote");
+
+function mailtoFallback(data) {
+  const subject = `Contact — ${data.get("name")}`;
   const body = [
-    `Nom / الاسم: ${data.get("name")}`,
-    `Entreprise / الشركة: ${data.get("company")}`,
+    `Nom: ${data.get("name")}`,
+    `Organisation: ${data.get("company")}`,
     `E-mail: ${data.get("email")}`,
-    `Tél / الهاتف: ${data.get("phone")}`,
-    `Service / الخدمة: ${data.get("service")}`,
+    `Tél: ${data.get("phone")}`,
+    `Service: ${data.get("service")}`,
     "",
     data.get("message"),
   ].join("\n");
   window.location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  const note = document.getElementById("formNote");
-  note.textContent = DICTS[document.documentElement.lang]["form.sent"];
-  note.hidden = false;
+}
+
+contactForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const data = new FormData(contactForm);
+  if (data.get("_honey")) return;
+  const button = contactForm.querySelector("button[type=submit]");
+  button.disabled = true;
+  formNote.hidden = false;
+  formNote.textContent = t("form.sending");
+  try {
+    const payload = Object.fromEntries(data);
+    payload._subject = `Nouveau message du site — ${payload.name}`;
+    payload._template = "table";
+    payload._replyto = payload.email;
+    const res = await fetch(CONFIG.formEndpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const json = await res.json();
+    if (!res.ok || String(json.success) !== "true") throw new Error(json.message);
+    formNote.textContent = t("form.sent");
+    contactForm.reset();
+  } catch (err) {
+    formNote.textContent = t("form.error");
+    mailtoFallback(data);
+  } finally {
+    button.disabled = false;
+  }
 });
+
+// ===== Analytics (GoatCounter: cookie-free, no consent banner needed) =====
+if (CONFIG.goatcounter) {
+  const gc = document.createElement("script");
+  gc.async = true;
+  gc.src = "https://gc.zgo.at/count.js";
+  gc.dataset.goatcounter = `https://${CONFIG.goatcounter}.goatcounter.com/count`;
+  document.head.appendChild(gc);
+}
 
 document.getElementById("year").textContent = new Date().getFullYear();
