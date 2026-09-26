@@ -29,3 +29,8 @@
 2. عند مزوّد النطاق: سجلات A نحو `185.199.108.153` و`185.199.109.153` و`185.199.110.153` و`185.199.111.153`، وسجل CNAME لـ `www` نحو `bourezgd.github.io`.
 3. في Settings → Pages: أدخل النطاق وفعّل **Enforce HTTPS**.
 4. استبدل `https://bourezgd.github.io/lynda-website/` بالنطاق الجديد في `index.html` و`robots.txt` و`sitemap.xml`.
+
+## الشهادات وشعارات العملاء
+القسمان مخفيان تلقائياً ما دامت القائمتان `CLIENTS` و`TESTIMONIALS` في `assets/js/content.js` فارغتين، ويظهران بمجرد إضافة أول عنصر (الأمثلة مكتوبة في الملف).
+- الشعارات في `assets/img/clients/`، وصور أصحاب الشهادات في `assets/img/testimonials/`.
+- لمعاينة التصميم بمحتوى تجريبي: افتح الموقع مع `?preview=1` في آخر الرابط.

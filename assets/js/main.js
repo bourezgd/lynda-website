@@ -92,6 +92,9 @@ const FR = {
   "form.error": "L'envoi a échoué. Votre application e-mail va s'ouvrir pour envoyer le message.",
   "footer.legal": "Mentions légales",
   "footer.privacy": "Confidentialité",
+  "testimonials.eyebrow": "Témoignages",
+  "testimonials.title": "Ce qu'ils disent de notre collaboration",
+  "clients.title": "Ils m'ont fait confiance",
 };
 
 const EN = {
@@ -175,6 +178,9 @@ const EN = {
   "form.error": "Sending failed. Your email app will open so you can send the message.",
   "footer.legal": "Legal notice",
   "footer.privacy": "Privacy",
+  "testimonials.eyebrow": "Testimonials",
+  "testimonials.title": "What clients say about working together",
+  "clients.title": "They trusted me",
 };
 
 const AR = {
@@ -258,7 +264,83 @@ const AR = {
   "form.error": "تعذّر الإرسال. سيتم فتح تطبيق البريد لإرسال رسالتك.",
   "footer.legal": "الإشعار القانوني",
   "footer.privacy": "سياسة الخصوصية",
+  "testimonials.eyebrow": "شهادات",
+  "testimonials.title": "ماذا يقول عملائي عن تعاوننا",
+  "clients.title": "وثقوا بي",
 };
+
+// ===== Social proof (data in assets/js/content.js) =====
+const PREVIEW = new URLSearchParams(location.search).has("preview");
+const clientsData = CLIENTS.length || !PREVIEW ? CLIENTS
+  : Array.from({ length: 6 }, (_, i) => ({ name: `Logo client ${i + 1}` }));
+const testimonialsData = TESTIMONIALS.length || !PREVIEW ? TESTIMONIALS
+  : Array.from({ length: 3 }, () => ({
+      name: "Prénom Nom",
+      role: { fr: "Fonction, Organisation", en: "Role, Organisation", ar: "المنصب، المؤسسة" },
+      quote: {
+        fr: "Exemple de témoignage : le texte réel du client apparaîtra ici, en deux à quatre phrases.",
+        en: "Sample testimonial: the client's real words will appear here, in two to four sentences.",
+        ar: "مثال على شهادة: سيظهر هنا نص العميل الحقيقي في جملتين إلى أربع جمل.",
+      },
+    }));
+
+const el = (tag, className, text) => {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text) node.textContent = text;
+  return node;
+};
+const pick = (value, lang) => (typeof value === "string" ? value : value?.[lang] || value?.fr || "");
+
+function renderClients() {
+  if (!clientsData.length) return;
+  const list = document.getElementById("clientsList");
+  clientsData.forEach((client) => {
+    const item = el("li", "clients__item");
+    const inner = client.url ? el("a") : el("span");
+    if (client.url) Object.assign(inner, { href: client.url, target: "_blank", rel: "noopener" });
+    if (client.logo) {
+      const img = el("img");
+      Object.assign(img, { src: client.logo, alt: client.name, loading: "lazy" });
+      inner.appendChild(img);
+    } else {
+      inner.appendChild(el("span", "clients__placeholder", client.name));
+    }
+    item.appendChild(inner);
+    list.appendChild(item);
+  });
+  document.getElementById("clients").hidden = false;
+}
+
+function renderTestimonials(lang) {
+  if (!testimonialsData.length) return;
+  const grid = document.getElementById("testimonialsGrid");
+  grid.replaceChildren();
+  testimonialsData.forEach((item) => {
+    const card = el("figure", "testimonial");
+    card.appendChild(el("span", "testimonial__mark", "“"));
+    card.appendChild(el("blockquote", "testimonial__quote", pick(item.quote, lang)));
+    const caption = el("figcaption", "testimonial__author");
+    if (item.photo) {
+      const img = el("img", "testimonial__photo");
+      Object.assign(img, { src: item.photo, alt: item.name, loading: "lazy" });
+      caption.appendChild(img);
+    } else {
+      caption.appendChild(el("span", "testimonial__photo testimonial__photo--initials",
+        item.name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase()));
+    }
+    const who = el("div");
+    who.appendChild(el("strong", null, item.name));
+    who.appendChild(el("span", null, pick(item.role, lang)));
+    caption.appendChild(who);
+    card.appendChild(caption);
+    grid.appendChild(card);
+  });
+  document.getElementById("testimonials").hidden = false;
+}
+
+renderClients();
+renderTestimonials(document.documentElement.lang);
 
 const DICTS = { ar: AR, fr: FR, en: EN };
 const langButtons = document.querySelectorAll("[data-lang]");
@@ -273,6 +355,7 @@ function setLang(lang) {
   });
   document.title = dict["meta.title"];
   langButtons.forEach((btn) => btn.setAttribute("aria-pressed", btn.dataset.lang === lang));
+  renderTestimonials(lang);
   try { localStorage.setItem("lang", lang); } catch (e) {}
 }
 
