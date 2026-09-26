@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" dir="ltr">
+<html lang="fr" dir="ltr" data-root="">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -71,11 +71,11 @@
         <a href="#contact" data-i18n="nav.contact">Contact</a>
       </nav>
       <div class="header__actions">
-        <div class="lang-switch" role="group" aria-label="Language">
-          <button type="button" data-lang="fr" aria-pressed="true">FR</button>
-          <button type="button" data-lang="en" aria-pressed="false">EN</button>
-          <button type="button" data-lang="ar" aria-pressed="false" lang="ar">ع</button>
-        </div>
+        <nav class="lang-switch" aria-label="Langue">
+          <a href="./" hreflang="fr" lang="fr" data-lang="fr" aria-current="page">FR</a>
+          <a href="en/" hreflang="en" lang="en" data-lang="en">EN</a>
+          <a href="ar/" hreflang="ar" lang="ar" data-lang="ar">ع</a>
+        </nav>
         <a href="#contact" class="btn btn--gold btn--sm" data-i18n="cta.contact">Me contacter</a>
         <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
       </div>
@@ -92,7 +92,8 @@
         <p class="hero__lead" data-i18n="hero.lead">Un parcours entre les plus grandes marques des télécoms et les chaînes de télévision, mis aujourd'hui au service des institutions et des personnalités qui veulent être vues, entendues et crues.</p>
         <div class="hero__cta">
           <a href="#contact" class="btn btn--gold" data-i18n="cta.contact">Me contacter</a>
-          <a href="#journey" class="btn btn--ghost" data-i18n="cta.journey">Découvrir mon parcours</a>
+          <a href="#journey" class="btn btn--ghost" data-hide-if-booking data-i18n="cta.journey">Découvrir mon parcours</a>
+          <a href="#" class="btn btn--ghost" data-booking target="_blank" rel="noopener" hidden data-i18n="cta.book">Réserver un appel découverte</a>
         </div>
       </div>
       <div class="hero__visual reveal">
@@ -263,6 +264,17 @@
     </div>
   </section>
 
+  <!-- Featured media (hidden until MEDIA in assets/js/content.js has entries) -->
+  <section class="section media" id="media" hidden>
+    <div class="container">
+      <div class="section__head reveal">
+        <span class="eyebrow" data-i18n="media.eyebrow">À la une</span>
+        <h2 class="section__title" data-i18n="media.title">Interviews, émissions et publications</h2>
+      </div>
+      <div class="media__grid" id="mediaGrid"></div>
+    </div>
+  </section>
+
   <!-- Testimonials (hidden until TESTIMONIALS in assets/js/content.js has entries) -->
   <section class="section testimonials" id="testimonials" hidden>
     <div class="container">
@@ -299,6 +311,7 @@
         <p data-i18n="contact.lead">Remplissez le formulaire ou contactez-moi directement via mes réseaux.</p>
         <ul class="contact__list">
           <!-- البريد والهاتف يُعدَّلان في CONFIG داخل assets/js/main.js -->
+          <li data-booking-item hidden><span data-i18n="contact.book">Appel découverte gratuit de 30 minutes</span><a href="#" data-booking target="_blank" rel="noopener" data-i18n="cta.book">Réserver un appel découverte</a></li>
           <li><span data-i18n="contact.email">E-mail</span><a href="#" id="emailLink"></a></li>
           <li><span data-i18n="contact.phone">Téléphone / WhatsApp</span><a href="#" id="waLink" dir="ltr"></a></li>
           <li><span data-i18n="contact.location">Localisation</span><strong data-i18n="contact.city">Alger, Algérie</strong></li>
@@ -308,6 +321,17 @@
           <a href="https://www.instagram.com/lynda_khalfa_chaib" target="_blank" rel="noopener" aria-label="Instagram">ig</a>
           <a href="https://www.facebook.com/share/1FAeTQP4gi/" target="_blank" rel="noopener" aria-label="Facebook">f</a>
         </div>
+        <form class="newsletter" id="newsletter" hidden>
+          <h3 data-i18n="news.title">Conseils médias &amp; communication</h3>
+          <p data-i18n="news.lead" data-news-plain>Recevez occasionnellement mes conseils pour mieux communiquer et gérer votre image. Sans spam.</p>
+          <p data-i18n="news.leadGuide" data-news-guide hidden>Recevez gratuitement mon guide pratique, puis mes conseils occasionnels. Sans spam.</p>
+          <div class="newsletter__row">
+            <input type="email" name="email" required aria-label="E-mail" data-i18n-placeholder="news.placeholder" placeholder="Votre e-mail">
+            <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <button type="submit" class="btn btn--gold btn--sm" data-i18n="news.submit">Je m'inscris</button>
+          </div>
+          <p class="newsletter__note" id="newsletterNote" hidden></p>
+        </form>
       </div>
       <form class="form reveal" id="contactForm">
         <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -359,6 +383,7 @@
     <svg viewBox="0 0 32 32" width="28" height="28" fill="currentColor"><path d="M16 3C8.8 3 3 8.8 3 16c0 2.3.6 4.5 1.7 6.5L3 29l6.7-1.7c1.9 1 4.1 1.6 6.3 1.6 7.2 0 13-5.8 13-13S23.2 3 16 3zm0 23.7c-2 0-4-.5-5.7-1.6l-.4-.2-4 1 1.1-3.9-.3-.4C5.6 19.9 5 18 5 16 5 9.9 9.9 5 16 5s11 4.9 11 11-4.9 10.7-11 10.7zm6-8c-.3-.2-1.9-1-2.2-1.1-.3-.1-.5-.2-.7.2-.2.3-.8 1.1-1 1.3-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-1.9-1.8-2.2-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.4.3-.6.1-.2 0-.4 0-.6l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.8s1.2 3.3 1.4 3.5c.2.2 2.4 3.6 5.7 5 .8.3 1.4.5 1.9.7.8.3 1.6.2 2.2.1.7-.1 1.9-.8 2.2-1.5.3-.8.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z"/></svg>
   </a>
 
+  <script src="assets/js/i18n.js"></script>
   <script src="assets/js/content.js"></script>
   <script src="assets/js/main.js"></script>
 </body>
